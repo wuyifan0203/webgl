@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04</title>
+  <script src="../lib/cuon-matrix.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/webgl-utils.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+<script type="text/javascript">
+  const VSHADER_SOURCE =
+          'attribute vec4 a_Position;\n'+
+          'attribute float a_PointSize;\n'+
+          'void main() {\n' +
+          '  gl_Position = a_Position;\n' + // Set the vertex coordinates of the point
+          '  gl_PointSize = a_PointSize;\n' +                    // Set the point size
+          '}\n';
+
+  // Fragment shader program
+  const FSHADER_SOURCE =
+          'void main() {\n' +
+          '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' + // Set the point color
+          '}\n';
+
+  function main() {
+    const canvasDom = document.querySelector('#canvas');
+    const gl = canvasDom.getContext('webgl');
+
+    initShaders(gl,VSHADER_SOURCE,FSHADER_SOURCE);
+    const a_Position = gl.getAttribLocation(gl.program,'a_Position');
+    const a_PointSize = gl.getAttribLocation(gl.program,'a_PointSize');
+    gl.vertexAttrib1f(a_PointSize,5.0);
+    canvasDom.addEventListener('mousedown',
+        (ev)=> click(ev,gl,canvasDom,a_Position)
+    )
+
+    gl.clearColor(0.0,0.0,0.0,1.0);
+
+  }
+  const pointList = [];
+  
+  function click(event,gl,canvas,position) {
+      const [x,y] = [event.clientX,event.clientY];
+      const rect = event.target.getBoundingClientRect();
+      const [halfHeight,halfWidth] = [canvas.height/2,canvas.width/2]
+      pointList.push({
+          x:((x-rect.left) - halfHeight)/halfHeight,
+          y:(halfWidth-y-rect.top)/halfWidth
+      })
+
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      console.log(pointList)
+
+      pointList.length && pointList.forEach((point)=>{
+         const {x,y} = point
+         gl.vertexAttrib3f(position,x,y,0.0);
+         gl.drawArrays(gl.POINTS,0,1);
+     })
+  }
+
+  main();
+</script>
+
+</body>
+</html>

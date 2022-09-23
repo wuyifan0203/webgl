@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>03</title>
+  <script src="../lib/cuon-matrix.js"></script>
+  <script src="../lib/cuon-utils.js"></script>
+  <script src="../lib/webgl-debug.js"></script>
+  <script src="../lib/webgl-utils.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="500" height="500"></canvas>
+<script type="text/javascript">
+
+
+  var VSHADER_SOURCE =
+          'attribute vec4 a_Position;\n'+
+          'attribute float a_PointSize;\n'+
+          'void main() {\n' +
+          '  gl_Position = a_Position;\n' + // Set the vertex coordinates of the point
+          '  gl_PointSize = a_PointSize;\n' +                    // Set the point size
+          '}\n';
+
+  // Fragment shader program
+  var FSHADER_SOURCE =
+          'void main() {\n' +
+          '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' + // Set the point color
+          '}\n';
+
+  function main() {
+    const canvasDom = document.querySelector('#canvas');
+    const gl = canvasDom.getContext('webgl');
+    initShaders(gl,VSHADER_SOURCE,FSHADER_SOURCE);
+      console.log(gl)
+
+    const a_Position = gl.getAttribLocation(gl.program,'a_Position');
+    const a_PointSize = gl.getAttribLocation(gl.program,'a_PointSize');
+    gl.vertexAttrib3f(a_Position,0.0,0.0,0.0);
+    gl.vertexAttrib1f(a_PointSize,30.0);
+
+    gl.clearColor(0.0,0.0,0.0,1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS,0,1);
+  }
+
+  main();
+
+
+
+</script>
+
+</body>
+</html>
