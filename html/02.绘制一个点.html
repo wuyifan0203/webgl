@@ -3,12 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>02</title>
+    <script src="../lib/cuon-matrix.js"></script>
+    <script src="../lib/cuon-utils.js"></script>
+    <script src="../lib/webgl-debug.js"></script>
+    <script src="../lib/webgl-utils.js"></script>
 </head>
 <body>
 <canvas id="canvas" width="500" height="500"></canvas>
 <script type="text/javascript">
     const canvasDom = document.querySelector('#canvas');
     const gl = canvasDom.getContext('webgl');
+    // var FShader = `
+    // void main() {
+    //     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+    // }
+    // `
+    // var VShader = `
+    // void main() {
+    //     gl_Position = vec4(0.0, 0.0, 0.0, 0.0, 1.0);
+    //     gl_PointSize = 10.0;
+    // }
+    // `
+
+    var VSHADER_SOURCE =
+        'void main() {\n' +
+        '  gl_Position = vec4(0.5, 0.0, 0.0, 1.0);\n' + // Set the vertex coordinates of the point
+        '  gl_PointSize = 10.0;\n' +                    // Set the point size
+        '}\n';
+
+    // Fragment shader program
+    var FSHADER_SOURCE =
+        'void main() {\n' +
+        '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' + // Set the point color
+        '}\n';
+    initShaders(gl,VSHADER_SOURCE,FSHADER_SOURCE)
+
+    gl.clearColor(0.0,0.0,0.0,1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS,0,1);
+
+
+    // function main() {
+    //     // Retrieve <canvas> element
+    //     var canvas = document.getElementById('canvas');
+    //
+    //     // Get the rendering context for WebGL
+    //     // var gl = getWebGLContext(canvas);
+    //     const gl = canvas.getContext('webgl');
+    //     if (!gl) {
+    //         console.log('Failed to get the rendering context for WebGL');
+    //         return;
+    //     }
+    //
+    //     // Initialize shaders
+    //     if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    //         console.log('Failed to intialize shaders.');
+    //         return;
+    //     }
+    //
+    //     // Specify the color for clearing <canvas>
+    //     gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    //
+    //     // Clear <canvas>
+    //     gl.clear(gl.COLOR_BUFFER_BIT);
+    //
+    //     // Draw a point
+    //     gl.drawArrays(gl.POINTS, 0, 1);
+    // }
+    // main()
+
 
 </script>
 </body>
