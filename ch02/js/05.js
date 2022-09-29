@@ -1,6 +1,5 @@
 const vShader =
     'attribute vec4 a_Position;\n'+
-    'attribute float a_PointSize;\n'+
     'void main() {\n'+
     '  gl_Position = a_Position;\n'+
     '  gl_PointSize = a_PointSize;\n'+
@@ -33,36 +32,6 @@ function main() {
     gl.clear(gl.COLOR_BUFFER_BIT)
 
 
-}
-const pointList = [];
-const colorList = [];
-
-function click(ev,gl,dom,position,color) {
-    const [x,y] = [ev.clientX,ev.clientY];
-    const rect = ev.target.getBoundingClientRect();
-    const [halfHeight,halfWidth] = [dom.height/2,dom.width/2]
-    pointList.push({
-        x:((x-rect.left) - halfHeight)/halfHeight,
-        y:(halfWidth-y-rect.top)/halfWidth
-    })
-
-    colorList.push({
-        r:Math.random(),
-        g:Math.random(),
-        b:Math.random(),
-        a:1
-    })
-
-    gl.clear(gl.COLOR_BUFFER_BIT);
-
-
-    pointList.length && pointList.forEach((point,i)=>{
-        const {x,y} = point
-        gl.vertexAttrib3f(position,x,y,0.0);
-        const {r,g,b,a} = colorList[i];
-        gl.uniform4f(color,r,g,b,a);
-        gl.drawArrays(gl.POINTS,0,1);
-    })
 }
 
 
