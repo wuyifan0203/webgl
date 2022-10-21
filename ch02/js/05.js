@@ -25,7 +25,7 @@ function main() {
     const a_Position = gl.getAttribLocation(gl.program,'a_Position');
     const a_PointSize = gl.getAttribLocation(gl.program,'a_PointSize');
 
-    const u_Color = gl.getUniformLocation(gl.program,'u_Color')
+    const u_Color = gl.getUniformLocation(gl.program,'u_Color');
     gl.vertexAttrib1f(a_PointSize,10.0);
 
 
