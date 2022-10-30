@@ -34,10 +34,10 @@ function main() {
 
 function initVertexBuffers(gl) {
     const origin = new Float32Array([
-        -0.5,0.5  ,0.0, 1.0,
-        -0.5,-0.5,  0.0,0.0,
-        0.5,0.5,  1.0,1.0,
-        0.5,-0.5,  1.0,0.0,
+        -0.5,0.5  ,-0.3, 1.7,
+        -0.5,-0.5,  -0.3,-0.2,
+        0.5,0.5,  1.7,1.7,
+        0.5,-0.5,  1.7,-0.2,
 
     ])
     const FSIZE = origin.BYTES_PER_ELEMENT;
@@ -67,6 +67,13 @@ function initTexture(gl) {
         gl.activeTexture(gl.TEXTURE0); // 激活纹理对象
         gl.bindTexture(gl.TEXTURE_2D,texture);// 绑定纹理对象
         gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);// 配置纹理对象参数
+        // gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.REPEAT);// 配置纹理对象参数
+        // gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);// 配置纹理对象参数
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.MIRRORED_REPEAT);// 配置纹理对象参数
+        // gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.REPEAT);// 配置纹理对象参数
+        // gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);// 配置纹理对象参数
+        gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.MIRRORED_REPEAT);// 配置纹理对象参数
+
         gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,image) // 将纹理图像分配给纹理对象
         gl.uniform1i(u_Sampler,0);
         gl.clear(gl.COLOR_BUFFER_BIT);
