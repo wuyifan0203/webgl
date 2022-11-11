@@ -17,7 +17,7 @@ const fShader =
     '}\n';
 
 
-
+let [ex,ey,ez] =[0.2,0.25,0.25]
 
 function main() {
     const canvasDom = document.querySelector('#canvas');
@@ -28,16 +28,28 @@ function main() {
     initVertexBuffers(gl);
 
     document.addEventListener('keydown',(e)=>{
-        console.log(e.code)
+        const key = e.code;
+        console.log(key)
+        if(key === 'KeyW'){
+            ey+=0.01;
+        }else if(key === 'KeyS'){
+            ey-=0.01;
+        }else if(key === 'KeyA'){
+            ex+=0.01;
+        }else if(key === 'KeyD'){
+            ex-=0.01;
+        }else if(key === 'Space'){
+            ez+=0.01;
+        }else if(key === 'KeyC'){
+            ez-=0.01;
+        }
+
+
+        const viewMatrix = new Matrix4().setLookAt(ex,ey,ez,0.0,0.0,0.0,0.0,1.0,0.0)
+        const modalMatrix = new Matrix4().scale(1,1,1).rotate(30,0,1,0).translate(0,0,0)
+        viewMatrix.multiply(modalMatrix)
+        draw(gl,viewMatrix)
     })
-
-
-    const viewMatrix = new Matrix4().setLookAt(0.2,0.25,0.25,0.0,0.0,0.0,0.0,1.0,0.0)
-    // const viewMatrix = new Matrix4().setLookAt(0.0,0.0,1.0,0.0,0.0,0.0,0.0,1.0,0.0)
-    const modalMatrix = new Matrix4().scale(1,1,1).rotate(30,0,1,0).translate(0,0,0)
-    viewMatrix.multiply(modalMatrix)
-
-
 
 }
 
@@ -71,7 +83,7 @@ function initVertexBuffers(gl) {
 
 }
 
-function draw() {
+function draw(gl,viewMatrix) {
     const u_ModalViewMatrix = gl.getUniformLocation(gl.program,'u_ModalViewMatrix');
     gl.uniformMatrix4fv(u_ModalViewMatrix,false,viewMatrix.elements)
 
