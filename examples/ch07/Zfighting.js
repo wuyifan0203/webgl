@@ -50,7 +50,7 @@ function main() {
 
   // Get the storage locations of u_ViewProjMatrix
   var u_ViewProjMatrix = gl.getUniformLocation(gl.program, 'u_ViewProjMatrix');
-  if (!u_ViewProjMatrix) { 
+  if (!u_ViewProjMatrix) {
     console.log('Failed to get the storage locations of u_ViewProjMatrix');
     return;
   }
@@ -79,16 +79,16 @@ function initVertexBuffers(gl) {
     // Vertex coordinates and color
      0.0,  2.5,  -5.0,  0.4,  1.0,  0.4, // The green triangle
     -2.5, -2.5,  -5.0,  0.4,  1.0,  0.4,
-     2.5, -2.5,  -5.0,  1.0,  0.4,  0.4, 
+     2.5, -2.5,  -5.0,  1.0,  0.4,  0.4,
 
      0.0,  3.0,  -5.0,  1.0,  0.4,  0.4, // The yellow triagle
     -3.0, -3.0,  -5.0,  1.0,  1.0,  0.4,
-     3.0, -3.0,  -5.0,  1.0,  1.0,  0.4, 
+     3.0, -3.0,  -5.0,  1.0,  1.0,  0.4,
   ]);
   var n = 6;
 
   // Create a buffer object
-  var vertexColorbuffer = gl.createBuffer();  
+  var vertexColorbuffer = gl.createBuffer();
   if (!vertexColorbuffer) {
     console.log('Failed to create the buffer object');
     return -1;
