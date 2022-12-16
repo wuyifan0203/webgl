@@ -28,7 +28,7 @@ window.onload=()=>{
 // initVertexBuffer
 // addListener -> draw
 // draw
-// drawBox * 2
+// drawBox * 6
 
 var g_modelMatrix = new Matrix4(), g_mvpMatrix = new Matrix4();
 var g_normalMatrix = new Matrix4();
@@ -63,9 +63,13 @@ function main() {
 
 var step = 3.0;
 var arm1Angle = -90.0;
+var handeAngle = 0.0;
+
+var fingerAngle = 0
 var joint1Angle = 0.0;
 
 function keydown(e,gl,n,VPMatrix,MVPMatrix,NormalMatrix) {
+    console.log(e.code)
     switch (e.code){
         case 'ArrowUp':
             joint1Angle < 135.0 && (joint1Angle += step);
@@ -79,6 +83,18 @@ function keydown(e,gl,n,VPMatrix,MVPMatrix,NormalMatrix) {
         case 'ArrowLeft':
             arm1Angle = (arm1Angle - step) % 360;
             break
+        case 'KeyA':
+            handeAngle = (handeAngle + step) % 360;
+            break
+        case 'KeyD':
+            handeAngle = (handeAngle - step) % 360;
+            break
+        case 'KeyW':
+            fingerAngle < 60 && (fingerAngle = (fingerAngle + step) % 360);
+            break
+        case 'KeyS':
+            fingerAngle > -21 && (fingerAngle = (fingerAngle - step) % 360);
+            break
         default: return
     }
     draw(gl,n,VPMatrix,MVPMatrix,NormalMatrix);
@@ -89,17 +105,33 @@ function draw(gl,n,VPMatrix,MVPMatrix,NormalMatrix) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const arm1Length = 10.0;
-    // console.log(g_modelMatrix)
-    g_modelMatrix.setTranslate(0.0,-12.0,0.0).rotate(arm1Angle,0,1,0);
-    drawBox(gl,n,VPMatrix,MVPMatrix,NormalMatrix);
 
-    g_modelMatrix.translate(0,arm1Length,0).rotate(joint1Angle,0.0,0.0,1.0).scale(1.3,1.0,1.3);
-    drawBox(gl,n,VPMatrix,MVPMatrix,NormalMatrix);
+    g_modelMatrix.setTranslate(0.0,-14,0.0);
+    drawBox(gl,n,4,0.1,4,VPMatrix,MVPMatrix,NormalMatrix);
+
+    g_modelMatrix.setTranslate(0.0,-12.0,0.0).rotate(arm1Angle,0,1,0);
+    drawBox(gl,n,1,1,1,VPMatrix,MVPMatrix,NormalMatrix);
+
+    g_modelMatrix.translate(0,10,0).rotate(joint1Angle,0.0,0.0,1.0);
+    drawBox(gl,n,1.2,0.8,1.2,VPMatrix,MVPMatrix,NormalMatrix);
+
+    g_modelMatrix.translate(0,8,0).rotate(handeAngle,0.0,1.0,0.0);
+    drawBox(gl,n,0.5,0.15,2,VPMatrix,MVPMatrix,NormalMatrix);
+
+    stash(g_modelMatrix);
+
+    g_modelMatrix.translate(0,1.5,1).rotate(fingerAngle,1.0,0.0,0.0);
+    drawBox(gl,n,0.2,0.2,0.2,VPMatrix,MVPMatrix,NormalMatrix);
+
+    g_modelMatrix = pop()
+
+    g_modelMatrix.translate(0,1.5,-1).rotate(-fingerAngle,1.0,0.0,0.0);
+    drawBox(gl,n,0.2,0.2,0.2,VPMatrix,MVPMatrix,NormalMatrix);
 }
 
-function drawBox(gl,n,VPMatrix,MVPMatrix,NormalMatrix) {
-
+function drawBox(gl,n,x,y,z,VPMatrix,MVPMatrix,NormalMatrix) {
+    stash(g_modelMatrix);
+    g_modelMatrix.scale(x,y,z)
     g_mvpMatrix.set(VPMatrix).multiply(g_modelMatrix);
     gl.uniformMatrix4fv(MVPMatrix, false, g_mvpMatrix.elements);
 
@@ -108,7 +140,18 @@ function drawBox(gl,n,VPMatrix,MVPMatrix,NormalMatrix) {
 
     gl.drawElements(gl.TRIANGLES,n,gl.UNSIGNED_BYTE,0);
 
+    g_modelMatrix = pop()
+}
 
+var modelMatrixList = [];
+
+function stash(m) {
+    const mm = new Matrix4(m);
+    modelMatrixList.push(mm);
+}
+
+function pop() {
+    return modelMatrixList.pop();
 }
 
 // Create a cube
